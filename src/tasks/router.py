@@ -23,3 +23,13 @@ def create_task(body:TaskDTO,db = Depends(get_db)): # yaha ham apne create_task 
 def get_all_tasks(db = Depends(get_db)):
     return controller.get_tasks(db)
 
+
+@task_routes.get("/get_task/{id}") # get api method /tasks/get/{id} endpoint rhega..
+def get_task(id:int,db = Depends(get_db)):
+    return controller.get_one_task(id,db)
+
+
+@task_routes.put("/update_task/{id}") # put api method /tasks/update/{id} endpoint rhega..
+def update_task(id:int, body:TaskDTO, db = Depends(get_db)):
+    return controller.update_task(id, body, db)
+
