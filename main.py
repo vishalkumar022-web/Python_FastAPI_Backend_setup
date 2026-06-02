@@ -2,4 +2,11 @@
 
 from fastapi import FastAPI
 
-app = FastAPI(title="Task Management API", description="API for managing tasks and users", version="1.0.0")
+from src.utils.db import Base, engine
+
+Base.metadata.create_all(engine) # es line se ham apne database me tables create karenge jo hamne apne models me define kiye hai. Ye line ensure karti hai ki jab ham apne application ko run karenge, to hamare database me necessary tables create ho jayenge agar wo pehle se exist nahi karte hai.
+
+
+app = FastAPI(title="Task Management API")
+
+
