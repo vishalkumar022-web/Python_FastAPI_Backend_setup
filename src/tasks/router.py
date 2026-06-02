@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session # yaha ham SQLAlchemy ke Session class ko imp
 
 task_routes = APIRouter(prefix="/tasks")
 
+#**(db:Session)** ka mtlb hai ki ham apne db parameter ko Session type ka define kr rhe hai, jisse ham apne database session ko type hint kr sake aur apne controller functions me use kr sake. Isse ham apne application me database interactions ko easily manage kar sakte hain aur apne controller functions me database session ka use karke necessary operations perform kar sakte hain. Aur get_db function ko Depends ke through pass kr rhe hai, jisse ham apne database session ko create kr sake aur usse apne controller functions me use kr sake. Isse ham apne application me database interactions ko easily manage kar sakte hain aur apne controller functions me database session ka use karke necessary operations perform kar sakte hain like quering the database, creating new records, updating existing records, and deleting records. Overall, ye db:Session = Depends(get_db) hamare application me database interactions ko manage karne ke liye ek important part hai, jisse ham apne controller functions me database session ka use karke necessary operations perform kar sakte hain aur apne application ke data ko effectively manage kar sakte hain.
 
 
 @task_routes.post("/create" , response_model=Task_OutputDTO , status_code=status.HTTP_201_CREATED) # post api method /tasks/create endpoint rhega..
@@ -42,3 +43,4 @@ def delete_task(id:int, db:Session = Depends(get_db)):
 
 
 
+# hr router me hamne body me type TaskDTO diya hai jo ki hamare ko input lene ka kaam krta hai jo ki hamne DTOs file me define kiya hai, aur response_model me Task_OutputDTO diya hai jo ki hamare output ko define krta hai jo ki hamne DTOs file me define kiya hai. Isse ham apne application me data validation aur structuring ko ensure kar sakte hain, jisse client se aane wale data ko expected structure ke according validate kar sakte hain aur hamare API responses ko consistent aur informative bana sakte hain. Overall, ye DTOs hamare application ke liye ek important role play karenge in terms of data validation and structuring for task-related operations.
