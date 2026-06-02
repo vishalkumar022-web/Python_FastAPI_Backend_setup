@@ -33,3 +33,7 @@ def get_task(id:int,db = Depends(get_db)):
 def update_task(id:int, body:TaskDTO, db = Depends(get_db)):
     return controller.update_task(id, body, db)
 
+
+@task_routes.delete("/delete_task/{id}") # delete api method /tasks/delete/{id} endpoint rhega..
+def delete_task(id:int, db = Depends(get_db)):
+    return controller.delete_task(id, db)

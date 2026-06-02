@@ -52,12 +52,36 @@ def update_task(id:int, body:TaskDTO, db: Session):
         return {"Status": "Error", "message": "updated task id is not found"}
     
 
-    update_task_ID.title = body.title # yaha ham update_task variable ke title field ko client se aane wale body parameter ke title field ke barabar set kar rahe hain, jisse ham apne database me specific task record ke title field ko update kar sakte hain.
-    update_task_ID.description = body.description # yaha ham update_task variable ke description field ko client se aane wale body parameter ke description field ke barabar set kar rahe hain, jisse ham apne database me specific task record ke description field ko update kar sakte hain.
-    update_task_ID.status = body.status # yaha ham update_task variable ke status field ko client se aane wale body parameter ke status field ke barabar set kar rahe hain, jisse ham apne database me specific task record ke status field ko update kar sakte hain.
+
+
+    # update_task_ID.title = body.title                     # yaha ham update_task variable ke title field ko client se aane wale body parameter ke title field ke barabar set kar rahe hain, jisse ham apne database me specific task record ke title field ko update kar sakte hain.
+    # update_task_ID.description = body.description         # yaha ham update_task variable ke description field ko client se aane wale body parameter ke description field ke barabar set kar rahe hain, jisse ham apne database me specific task record ke description field ko update kar sakte hain.
+    # update_task_ID.status = body.status                   # yaha ham update_task variable ke status field ko client se aane wale body parameter ke status field ke barabar set kar rahe hain, jisse ham apne database me specific task record ke status field ko update kar sakte hain.
+
+
+    update_task_data = body.model_dump() # ye model_dump() method Pydantic model ke data ko dictionary me convert kar deta hai, jisse hum apne repository functions me use kar sakte hain.
+    for key, value in update_task_data.items(): # yaha ham update_task_data dictionary ke key-value pairs par iterate kar rahe hain, jisse ham apne update_task variable ke corresponding fields ko dynamically update kar sakte hain.
+        setattr(update_task_ID, key, value) 
+       # es setattr() function ka use karke ham update_task_ID variable ke key field ko value se set kar rahe hain, es se fayda ye hai ki ham apne maan se chahe toh kisi feild ko update kar sakte hain ya nahi bhi kar sakte hain, kyunki ham apne update_task_data dictionary me se jis key ko bhi update karna chahte hain usko ham simply include kar denge aur jis key ko update nahi karna chahte hain usko ham apne update_task_data dictionary me se exclude kar denge. Isse ham apne update_task function ko flexible bana sakte hain aur client ko bhi ye suvidha de sakte hain ki wo apne request body me se sirf un fields ko include kare jo wo update karna chahte hain.
+
+
 
     db.add(update_task_ID) # yaha ham apne database session me update_task variable ko add kar rahe hain, jisse ham apne database me is task record ko update kar sakte hain.   
     db.commit() # yaha ham apne database session me changes ko commit kar rahe hain, jisse hamare database me update_task record update ho jayega.
     db.refresh(update_task_ID) # yaha ham apne database session me update_task variable ko refresh kar rahe hain, jisse hamare update_task variable me database se updated data aa jayega, jaise ki updated title, description aur status fields.
 
     return {"Status": "Success", "message": "Task updated successfully", "data": jsonable_encoder(update_task_ID)} # yaha ham apne controller function se ek response return kar rahe hain, jisme ham status, message aur data fields ko specify kar rahe hain. Is response me ham update_task variable ko data field me include kar rahe hain, jisse client ko pata chalega ki task successfully update ho gaya hai aur uska updated data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
+
+
+
+def delete_task(id:int, db: Session):
+
+    delete_task_ID = db.query(TaskModel).filter(TaskModel.id == id).first() # yaha ham apne database session me TaskModel ke record ko query kar rahe hain jiska id field client se aane wale id parameter ke barabar hai. Isse ham apne database me specific task record ko retrieve kar sakte hain.
+
+    if not delete_task_ID: # yaha ham check kar rahe hain ki agar delete_task variable me koi record nahi mila to ham ek error response return karenge, jisme ham status aur message fields ko specify karenge. Isse client ko pata chalega ki unka request unsuccessful tha kyunki specified id ke saath koi task record nahi mila.
+        return {"Status": "Error", "message": "deleted task id is not found"}
+
+    db.delete(delete_task_ID) # yaha ham apne database session me delete_task variable ko delete kar rahe hain, jisse ham apne database me is task record ko delete kar sakte hain.
+    db.commit() # yaha ham apne database session me changes ko commit kar rahe hain, jisse hamare database me delete_task record delete ho jayega.
+
+    return {"Status": "Success", "message": "Task deleted successfully"} # yaha ham apne controller function se ek response return kar rahe hain, jisme ham status aur message fields ko specify kar rahe hain. Is response me ham client ko ye bata rahe hain ki task successfully delete ho gaya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
