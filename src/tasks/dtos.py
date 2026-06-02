@@ -10,4 +10,8 @@ class TaskDTO(BaseModel): # yaha hum apne TaskDTO ko define kar rahe hain, jisme
     status: bool = False
 
     
- 
+class Task_OutputDTO(BaseModel): # yaha hum apne Task_OutputDTO ko define kar rahe hain, jisme hum apne task data ke fields ko specify karenge. Is DTO me hum id, title, description, status, aur due_date fields ko define karenge, jisse hum apne application me task data ko easily manage kar sakte hain aur client se aane wale data ko validate karke ensure kar sakte hain ki wo sahi format me hai. Is DTO ka use karke hum apne application me task-related operations ke liye data validation aur structuring ko ensure kar sakte hain.
+    id: int
+    title: str
+    description: str
+    status: bool 

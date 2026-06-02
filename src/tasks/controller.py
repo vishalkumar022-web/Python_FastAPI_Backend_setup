@@ -20,7 +20,7 @@ def create_task(body: TaskDTO, db: Session):
     db.refresh(new_task) # yaha ham apne database session me new_task object ko refresh kar rahe hain, jisse hamare new_task object me database se updated data aa jayega, jaise ki id field jo database me auto-generated hota hai.
 
 
-    return {"Status": "Success", "message": "Task created successfully", "data": new_task} # yaha ham apne controller function se ek response return kar rahe hain, jisme ham status, message aur data fields ko specify kar rahe hain. Is response me ham new_task object ko data field me include kar rahe hain, jisse client ko pata chalega ki task successfully create ho gaya hai aur uska data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
+    return new_task # yaha ham apne controller function se new_task object ko return kar rahe hain, jisse client ko pata chalega ki task successfully create ho gaya hai aur uska data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
             
 
 
@@ -29,7 +29,7 @@ def get_tasks(db: Session):
     
     tasks = db.query(TaskModel).all() # yaha ham apne database session me TaskModel ke saare records ko query kar rahe hain aur unhe tasks variable me store kar rahe hain. Isse ham apne database me saare task records ko retrieve kar sakte hain.
 
-    return {"Status": "Success", "message": "Tasks retrieved successfully", "data": tasks} # yaha ham apne controller function se ek response return kar rahe hain, jisme ham status, message aur data fields ko specify kar rahe hain. Is response me ham tasks variable ko data field me include kar rahe hain, jisse client ko pata chalega ki tasks successfully retrieve ho gaye hain aur unka data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
+    return tasks # yaha ham apne controller function se tasks variable ko return kar rahe hain, jisme ham apne database se saare task records ko include kar rahe hain. Isse client ko pata chalega ki saare tasks successfully retrieve ho gaye hain aur unka data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
 
 
 def get_one_task(id:int,db: Session):
@@ -39,8 +39,7 @@ def get_one_task(id:int,db: Session):
     if not one_task: # yaha ham check kar rahe hain ki agar task variable me koi record nahi mila to ham ek error response return karenge, jisme ham status aur message fields ko specify karenge. Isse client ko pata chalega ki unka request unsuccessful tha kyunki specified id ke saath koi task record nahi mila.
         return {"Status": "Error", "message": "Task not found"}
 
-    return {"Status": "Success", "message": "Task retrieved successfully", "data": jsonable_encoder(one_task)} # yaha ham apne controller function se ek response return kar rahe hain, jisme ham status, message aur data fields ko specify kar rahe hain. Is response me ham task variable ko data field me include kar rahe hain, jisse client ko pata chalega ki task successfully retrieve ho gaya hai aur uska data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
-
+    return one_task # yaha ham apne controller function se one_task variable ko return kar rahe hain, jisme ham apne database se specific task record ko include kar rahe hain. Isse client ko pata chalega ki task successfully retrieve ho gaya hai aur uska data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
 
 
 
@@ -66,11 +65,11 @@ def update_task(id:int, body:TaskDTO, db: Session):
 
 
 
-    db.add(update_task_ID) # yaha ham apne database session me update_task variable ko add kar rahe hain, jisse ham apne database me is task record ko update kar sakte hain.   
+    db.add(update_task_data) # yaha ham apne database session me update_task variable ko add kar rahe hain, jisse ham apne database me is task record ko update kar sakte hain.   
     db.commit() # yaha ham apne database session me changes ko commit kar rahe hain, jisse hamare database me update_task record update ho jayega.
-    db.refresh(update_task_ID) # yaha ham apne database session me update_task variable ko refresh kar rahe hain, jisse hamare update_task variable me database se updated data aa jayega, jaise ki updated title, description aur status fields.
+    db.refresh(update_task_data) # yaha ham apne database session me update_task variable ko refresh kar rahe hain, jisse hamare update_task variable me database se updated data aa jayega, jaise ki updated title, description aur status fields.
 
-    return {"Status": "Success", "message": "Task updated successfully", "data": jsonable_encoder(update_task_ID)} # yaha ham apne controller function se ek response return kar rahe hain, jisme ham status, message aur data fields ko specify kar rahe hain. Is response me ham update_task variable ko data field me include kar rahe hain, jisse client ko pata chalega ki task successfully update ho gaya hai aur uska updated data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
+    return update_task_data # yaha ham apne controller function se update_task variable ko return kar rahe hain, jisme ham apne database se updated task record ko include kar rahe hain. Isse client ko pata chalega ki task successfully update ho gaya hai aur uska updated data kya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
 
 
 
@@ -84,4 +83,7 @@ def delete_task(id:int, db: Session):
     db.delete(delete_task_ID) # yaha ham apne database session me delete_task variable ko delete kar rahe hain, jisse ham apne database me is task record ko delete kar sakte hain.
     db.commit() # yaha ham apne database session me changes ko commit kar rahe hain, jisse hamare database me delete_task record delete ho jayega.
 
-    return {"Status": "Success", "message": "Task deleted successfully"} # yaha ham apne controller function se ek response return kar rahe hain, jisme ham status aur message fields ko specify kar rahe hain. Is response me ham client ko ye bata rahe hain ki task successfully delete ho gaya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
+    return None # yaha ham apne controller function se None return kar rahe hain, jisse client ko pata chalega ki task successfully delete ho gaya hai. Is response format se ham apne API responses ko consistent aur informative bana sakte hain, jisse client ko easily samajh me aa sake ki unka request successful tha ya nahi aur agar successful tha to uska result kya hai.
+
+
+
