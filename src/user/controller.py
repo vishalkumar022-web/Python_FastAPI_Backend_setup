@@ -1,0 +1,1 @@
+# In this Controller file, we will define the functions that will handle the requests from the client and interact with the database to perform the necessary operations. These functions will be called by the routes defined in the routes.py file.

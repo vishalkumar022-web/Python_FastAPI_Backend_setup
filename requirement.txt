@@ -1,0 +1,2 @@
+## this requirement.txt help to store and install all the dependencies inside it like pom.xml in springboot
+

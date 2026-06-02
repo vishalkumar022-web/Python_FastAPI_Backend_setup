@@ -1,0 +1,3 @@
+# this .gitignore file is used to specify which files and directories should be ignored by Git when we commit our code to the repository.
+# we can add the names of files and directories that we want to ignore in this file, and Git will not track those files when we commit our code.
+# for example, we can ignore the .env file which contains sensitive information such as API keys and database credentials, and we can also ignore the node_modules directory which contains all the dependencies of our project and can be easily recreated by running npm install.
