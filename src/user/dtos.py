@@ -1,1 +1,21 @@
-# In this dtos file, we will define the data transfer objects (DTOs) that will be used to transfer data between the client and the server. These DTOs will be used to validate the data received from the client and to structure the data that will be sent back to the client. We will use Pydantic models to define these DTOs, which will allow us to easily validate the data and ensure that it conforms to the expected structure.
+
+from pydantic import BaseModel # ye line pydantic library se BaseModel class ko import karti hai. Pydantic ek data validation aur settings management library hai jo Python me data models banane ke liye use hoti hai. BaseModel class ko inherit karke ham apne data models bana sakte hain, jisme ham apne fields ko define kar sakte hain aur unki types specify kar sakte hain. Pydantic automatically data validation aur parsing ka kaam karta hai, jisse hamare code me errors kam hote hain aur data consistency maintain hoti hai.    
+
+class UserRequest(BaseModel):
+    username: str
+    name: str
+    email: str
+    hash_password: str
+    mobile_number: int
+    password: str
+
+
+
+class UserResponse(BaseModel):
+    id: int
+    username: str
+    name: str
+    email: str
+    mobile_number: int
+    created_at: str
+    is_active: bool
