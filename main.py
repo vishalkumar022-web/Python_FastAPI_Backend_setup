@@ -7,6 +7,7 @@ from src.utils.settings import Settings
 
 from src.tasks.model import TaskModel # ye line hamare TaskModel ko import karti hai, jisse ham apne database me "tasks" naam ke table ko create kar sakte hai. Ye line ensure karti hai ki hamare TaskModel ke structure ke according database me ek "tasks" naam ka table create ho jayega.
 
+from src.user.router import user_routes # ye line hamare user_routes ko import karti hai, jisse ham apne application me users ke related routes ko include kar sakte hai. Ye line ensure karti hai ki hamare application me users ke related endpoints properly defined ho jayenge aur ham unhe access kar sakte hai.
 
 Base.metadata.create_all(engine) # es line se ham apne database me tables create karenge jo hamne apne models me define kiye hai. Ye line ensure karti hai ki jab ham apne application ko run karenge, to hamare database me necessary tables create ho jayenge agar wo pehle se exist nahi karte hai.
 
@@ -18,6 +19,6 @@ app = FastAPI(title="Task Management API")
 
 app.include_router(task_routes) # es line se ham apne application me task_routes ko include karenge, jisse hamare application me tasks ke related endpoints properly defined ho jayenge aur ham unhe access kar sakte hai. Ye line ensure karti hai ki hamare application me tasks ke related routes properly registered ho jayenge aur ham unhe use kar sakte hai.
 
-
+app.include_router(user_routes) # es line se ham apne application me user_routes ko include karenge, jisse hamare application me users ke related endpoints properly defined ho jayenge aur ham unhe access kar sakte hai. Ye line ensure karti hai ki hamare application me users ke related routes properly registered ho jayenge aur ham unhe use kar sakte hai.
 
 

@@ -23,3 +23,9 @@ Spring Boot mein kya hota tha? Tumne application.properties mein spring.datasour
 
 
 # fastapi dev main.py :-- command help krta hai ki hamare main.py file me koi changes hone par server automatically restart ho jayega aur hamare changes reflect ho jayenge. Isse hamara development process bahut hi smooth ho jata hai kyunki hame baar baar server ko manually restart karne ki jarurat nahi hoti hai. Is command ka use karne ke liye hame fastapi library ko install karna hoga, jiske baad ham is command ka use karke apne application ko run kar sakte hai.
+
+# pip install PyJWT es line se ham PyJWT library ko install karenge, jisse ham apne application me JSON Web Tokens (JWT) ka use kar sakte hai. JWT ek open standard hai jo secure way me information exchange karne ke liye use hota hai. Is library ko install karke ham apne application me JWT authentication implement kar sakte hai, jisse ham apne endpoints ko secure kar sakte hai aur authorized users ko hi access de sakte hai.  
+
+
+
+# pip install "pwdlib[argon2]"  ye line se ham pwdlib library ko install karenge, jisme argon2 hashing algorithm included hai. Argon2 ek secure password hashing algorithm hai jo hamare users ke passwords ko securely store karne me madad karega. Is library ko install karne ke baad, ham apne application me argon2 hashing algorithm ka use karke users ke passwords ko hash kar sakte hai, jisse hamare application ki security badh jayegi.

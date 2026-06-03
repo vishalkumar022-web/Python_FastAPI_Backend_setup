@@ -1,5 +1,5 @@
-
-from pydantic import BaseModel # ye line pydantic library se BaseModel class ko import karti hai. Pydantic ek data validation aur settings management library hai jo Python me data models banane ke liye use hoti hai. BaseModel class ko inherit karke ham apne data models bana sakte hain, jisme ham apne fields ko define kar sakte hain aur unki types specify kar sakte hain. Pydantic automatically data validation aur parsing ka kaam karta hai, jisse hamare code me errors kam hote hain aur data consistency maintain hoti hai.    
+from pydantic import BaseModel
+from datetime import datetime
 
 class UserRequest(BaseModel):
     username: str
@@ -7,8 +7,6 @@ class UserRequest(BaseModel):
     email: str
     hash_password: str
     mobile_number: int
-    password: str
-
 
 
 class UserResponse(BaseModel):
@@ -17,5 +15,5 @@ class UserResponse(BaseModel):
     name: str
     email: str
     mobile_number: int
-    created_at: str
+    created_at: datetime # Isko string se datetime kar diya
     is_active: bool
