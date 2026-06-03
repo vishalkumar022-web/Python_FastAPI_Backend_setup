@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from src.tasks.model import TaskModel
 from src.tasks.dtos import TaskDTO
 
+
+
 def create_task_in_db(body: TaskDTO, db: Session):
     data = body.model_dump() # Pydantic model ko dictionary me convert kiya
     
@@ -22,15 +24,21 @@ def create_task_in_db(body: TaskDTO, db: Session):
     return new_task # Controller ko naya task wapas de diya
 
 
+
+
 def get_all_tasks_from_db(db: Session):
     # Database se saare tasks uthaye aur return kar diye
     return db.query(TaskModel).all()
+
+
 
 
 def get_task_by_id_from_db(id: int, db: Session):
     # Database me specific ID wala task dhundha
     # Agar milega toh task ka object return hoga, nahi milega toh 'None' return hoga
     return db.query(TaskModel).filter(TaskModel.id == id).first()
+
+
 
 
 def update_task_in_db(existing_task: TaskModel, body: TaskDTO, db: Session):
@@ -45,6 +53,8 @@ def update_task_in_db(existing_task: TaskModel, body: TaskDTO, db: Session):
     db.refresh(existing_task)
     
     return existing_task
+
+
 
 
 def delete_task_in_db(task_to_delete: TaskModel, db: Session):
