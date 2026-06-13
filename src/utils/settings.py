@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     # Ye Pydantic ko bata raha hai ki .env me 'DB_CONNECTION' naam ka ek variable hoga 
     # aur uska type 'string' hona chahiye. (Ye tumhara Security Guard hai, data validate kar raha hai)
     DB_CONNECTION: str
+    SECRET_KEY : str
+    ALGORITHM : str
+    EXP_TIME : int
 
 # Yahan humne us class ka ek object (instance) bana liya.
 # Ab pure application me kahin bhi database url chahiye, toh hum bas 'settings.DB_CONNECTION' likhenge!

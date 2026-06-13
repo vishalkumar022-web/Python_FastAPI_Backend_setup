@@ -14,7 +14,12 @@ class UserResponse(BaseModel):
     username: str
     name: str
     email: str
-    hash_password: str
     mobile_number: int
     created_at: datetime # Isko string se datetime kar diya
     is_active: bool
+
+
+
+class loginRequest(BaseModel):
+    username : str 
+    hash_password: str

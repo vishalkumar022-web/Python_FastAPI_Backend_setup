@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from src.user.dtos import UserRequest, UserResponse
+from src.user.dtos import UserRequest, UserResponse,loginRequest
 from src.user import controller # Yahan poora controller import kiya
 from src.utils.db import get_db
 
@@ -27,3 +27,9 @@ def delete_user_route(id: int, db: Session = Depends(get_db)):
 @user_routes.put("/{id}", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def update_user_route(id: int, body: UserRequest, db: Session = Depends(get_db)):
     return controller.update_user(id, body, db)
+
+
+@user_routes.post("/login" , status_code= status.HTTP_200_OK)
+def login(body:loginRequest , db:Session = Depends(get_db)):
+
+    return controller.login_user(body,db)
