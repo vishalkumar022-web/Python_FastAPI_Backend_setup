@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean , ForeignKey
 
 from src.utils.db import Base # ye base responsible hai hamare models ko database ke tables me convert karne ke liye. Isko import karke ham apne Task model ko Base se inherit karenge, jisse hamare Task model ka structure database me ek table ke roop me create ho jayega.
 
@@ -16,3 +16,7 @@ class TaskModel(Base):
 
     
     status = Column(Boolean, default=False) # ye line define karti hai ki hamare TaskModel me ek "status" field hoga jo Boolean type ka hoga aur iska default value False hoga. Is field me task ke status ko store kiya jayega, jisme True ka matlab task complete hai aur False ka matlab task incomplete hai.
+
+
+    # TaskModel ke andar ye line zaroor add karna bhai
+    user_id = Column(Integer , ForeignKey("user_table.id" , ondelete= "CASCADE")) # Ye batayega ki ye task kis user ne banaya hai
