@@ -1,5 +1,6 @@
-# ye gitignore file ke help se ham apne project ke un files aur folders ko ignore kar sakte hain jinhe hum git ke through track nahi karna chahte. Is file me hum un files aur folders ke naam ya patterns specify karte hain jinhe git ignore karega. Isse hum apne project ke unnecessary files ko git repository me add hone se rok sakte hain, jaise ki temporary files, log files, environment variable files, aur bhi bahut kuch. Isse hum apne project ko clean aur organized rakh sakte hain.
+# ye gitignore file ke help se ham apne project ke un files aur folders ko ignore kar sakte hain
 
 __pycache__/
 RememberNOTES.txt
 env/
+.env

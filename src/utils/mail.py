@@ -1,37 +1,39 @@
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
-from pydantic import EmailStr
+import httpx
 from typing import List
 from src.utils.settings import settings
 
-conf = ConnectionConfig(
-    MAIL_USERNAME = "vishalsingh37040@gmail.com",
-    MAIL_PASSWORD = settings.APP_PASSWORD, 
-    MAIL_FROM = "vishalsingh37040@gmail.com",
-    MAIL_PORT = 587,
-    MAIL_SERVER = "smtp.gmail.com",
-    MAIL_FROM_NAME="Task_Management Application",
-    MAIL_STARTTLS = True,
-    MAIL_SSL_TLS = False,
-    USE_CREDENTIALS = True,
-    VALIDATE_CERTS = True
-)
-
 async def send_email(emails: List[str]):
+    # Brevo API ka endpoint URL
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    # API call ke liye zaroori headers (yahan tumhari API key jayegi)
+    headers = {
+        "accept": "application/json",
+        "api-key": settings.BREVO_API_KEY,
+        "content-type": "application/json"
+    }
+
+    # Email ka content aur details
+    payload = {
+        "sender": {
+            "name": "Task Management Application",
+            "email": "vishalsingh37040@gmail.com" # Apna verified Brevo email daalna
+        },
+        "to": [{"email": email} for email in emails],
+        "subject": "Registration Confirmation",
+        "htmlContent": "<p>Hi, thanks for Registration in our application. Our team will connect with you shortly!.. </p>"
+    }
+
     try:
-        html = """<p>Hi, thanks for Registration in our application. Our team will connect with you shortly!.. </p> """
-
-        message = MessageSchema(
-            subject="Registration Confirmation",
-            recipients=emails,
-            body=html,
-            subtype=MessageType.html
-        )
-
-        fm = FastMail(conf)
-        await fm.send_message(message)
-        print("✅ Email successfully background me chala gaya!")
-        
+        # httpx ka use karke async API call
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, json=payload, headers=headers)
+            
+            # Agar response 201 (Created) aata hai toh email successful hai
+            if response.status_code == 201:
+                print("✅ Brevo API se Email successfully background me chala gaya!")
+            else:
+                print(f"❌ Brevo API Error: {response.status_code} - {response.text}")
+                
     except Exception as e:
-        # Agar koi SMTP ya connection error aayega, toh server crash nahi hoga, 
-        # bas terminal me ye message print ho jayega.
-        print(f"❌ Bhai, Email bhejne me error aaya: {e}")
+        print(f"❌ Bhai, Email API call me error aaya: {e}")

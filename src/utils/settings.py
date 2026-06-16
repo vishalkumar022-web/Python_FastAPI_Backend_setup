@@ -16,7 +16,8 @@ class Settings(BaseSettings):
     SECRET_KEY : str
     ALGORITHM : str
     EXP_TIME : int
-    APP_PASSWORD : str 
+
+    BREVO_API_KEY: str
 
 # Yahan humne us class ka ek object (instance) bana liya.
 # Ab pure application me kahin bhi database url chahiye, toh hum bas 'settings.DB_CONNECTION' likhenge!
