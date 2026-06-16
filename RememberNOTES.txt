@@ -29,3 +29,22 @@ Spring Boot mein kya hota tha? Tumne application.properties mein spring.datasour
 
 
 # pip install "pwdlib[argon2]"  ye line se ham pwdlib library ko install karenge, jisme argon2 hashing algorithm included hai. Argon2 ek secure password hashing algorithm hai jo hamare users ke passwords ko securely store karne me madad karega. Is library ko install karne ke baad, ham apne application me argon2 hashing algorithm ka use karke users ke passwords ko hash kar sakte hai, jisse hamare application ki security badh jayegi.
+
+
+
+
+ pip install alembic :--- 
+
+
+
+alembic init migrations :---
+
+
+
+
+alembic revision --autogenerate -m "add user_idto tasks" :---
+
+
+
+
+alembic upgrade head :--- 
