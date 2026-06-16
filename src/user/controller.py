@@ -80,10 +80,13 @@ def update_user(id: int, body: UserRequest, db: Session):
 
 
 def login_user(body: loginRequest, db: Session):
-    # 1. Pehle database se username check karo
-    user = repository.get_user_by_username(db, body.username)
     
-    # FIX: Agar user database me NAHI mila, tab error raise karna hai!
+    # FIX: .strip() lagaya hai taaki agar user galti se space type kar de, toh wo hat jaye
+    clean_username = body.username.strip()
+    
+    # Ab DB me clean_username search karenge
+    user = repository.get_user_by_username(db, clean_username)
+    
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, 
@@ -109,7 +112,6 @@ def login_user(body: loginRequest, db: Session):
     )
 
     return {"User Details ":user ,"token": token}
-
 
 ## Token send :---
 
