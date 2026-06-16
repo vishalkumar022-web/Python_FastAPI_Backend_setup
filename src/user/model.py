@@ -10,7 +10,11 @@ class UserModel(Base):
     name = Column(String, nullable=False) 
     email = Column(String, unique=True, index=True, nullable=False) 
     hash_password = Column(String, nullable=False) 
-    mobile_number = Column(Integer, unique=True, index=True, nullable=False) 
+
+
+   # <-- Yahan Integer ko String se replace kar diya!
+    mobile_number = Column(String, unique=True, index=True, nullable=False)
+    
     
     # Yahan default time add kiya, taaki DB khud time daal de
     created_at = Column(DateTime, default=func.now()) 

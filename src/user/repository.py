@@ -27,6 +27,8 @@ def register_user(db: Session, user_request: UserRequest):
     db.add(user)
     db.commit()
     db.refresh(user)
+
+
     return user
 
 def get_user_by_id(db: Session, user_id: int):

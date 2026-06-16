@@ -3,18 +3,23 @@
 
 from src.user.dtos import UserRequest, loginRequest
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, status , Request
+from fastapi import HTTPException, status , Request , BackgroundTasks
 from src.user import repository
 from src.utils.settings import settings
 from datetime import datetime, timedelta
 
+from src.utils.mail import send_email
 
 import jwt
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from fastapi.security import HTTPAuthorizationCredentials # Ye token ko securely handle karega
 
+from src.utils.mail import send_email
 
-def register_user(body: UserRequest, db: Session):
+
+# Function me 'background_tasks' parameter add kiya
+async def register_user(body: UserRequest, background_tasks: BackgroundTasks, db: Session):
+    
     user_with_same_username = repository.get_user_by_username(db, body.username)
     if user_with_same_username:
         raise HTTPException(status_code=400, detail="Username already exists!")
@@ -31,6 +36,12 @@ def register_user(body: UserRequest, db: Session):
     if not new_user:
         raise HTTPException(status_code=400, detail="User registration failed!")
     
+    # -------------------------------------------------------------
+    # FIX: Email bhejne ka kaam background ko de diya! 
+    # API yahan wait nahi karegi, turant user ko response de degi.
+    # -------------------------------------------------------------
+    background_tasks.add_task(send_email, [new_user.email])
+
     return new_user
 
 

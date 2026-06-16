@@ -6,7 +6,7 @@ class UserRequest(BaseModel):
     name: str
     email: str
     hash_password: str
-    mobile_number: int
+    mobile_number: str
 
 
 class UserResponse(BaseModel):
@@ -14,7 +14,7 @@ class UserResponse(BaseModel):
     username: str
     name: str
     email: str
-    mobile_number: int
+    mobile_number: str
     created_at: datetime # Isko string se datetime kar diya
     is_active: bool
 

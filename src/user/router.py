@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Request
+from fastapi import APIRouter, Depends, status, Request , BackgroundTasks
 from sqlalchemy.orm import Session
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
@@ -12,9 +12,12 @@ user_routes = APIRouter(prefix="/users")
 security = HTTPBearer() 
 
 
+
 @user_routes.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def register_user_route(body: UserRequest, db: Session = Depends(get_db)):
-    return controller.register_user(body, db)
+async def register_user_route(body: UserRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    # Controller ko background_tasks pass kar diya
+    return await controller.register_user(body, background_tasks, db)
+
 
 @user_routes.post("/login", status_code=status.HTTP_200_OK)
 def login(body: loginRequest, db: Session = Depends(get_db)):
