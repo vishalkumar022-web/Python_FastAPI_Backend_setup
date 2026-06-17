@@ -162,7 +162,6 @@ def is_authenticated(credentials: HTTPAuthorizationCredentials, db: Session):
 
 
 
-
 async def handle_forgot_password(request_data, background_tasks: BackgroundTasks, db_session: Session):
        # 1. Repository se user find karo
        user = repository.get_user_by_email(db_session, request_data.email)
@@ -180,6 +179,7 @@ async def handle_forgot_password(request_data, background_tasks: BackgroundTasks
        background_tasks.add_task(send_otp_email, user.email, otp)
        
        return {"message": "OTP sent successfully to your email"}
+
 
 async def handle_reset_password(request_data, db_session: Session):
        # 1. Repository se user find karo
