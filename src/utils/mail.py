@@ -17,11 +17,26 @@ async def send_email(emails: List[str]):
     payload = {
         "sender": {
             "name": "Task Management Application",
-            "email": "vishalsingh37040@gmail.com" # Apna verified Brevo email daalna
+            "email": "vishalsingh37040@gmail.com"
+        },
+        "replyTo": {
+            "email": "vishalsingh37040@gmail.com",
+            "name": "Vishal Support"
         },
         "to": [{"email": email} for email in emails],
-        "subject": "Registration Confirmation",
-        "htmlContent": "<p>Hi, thanks for Registration in our application. Our team will connect with you shortly!.. </p>"
+        "subject": "Registration Confirmation - Welcome!",
+        "htmlContent": """
+        <html>
+            <body>
+                <h2>Welcome to Task Management!</h2>
+                <p>Hi there,</p>
+                <p>Thanks for successfully registering in our application. We are thrilled to have you on board!</p>
+                <p>Our team will connect with you shortly. If you have any questions, just reply to this email.</p>
+                <br>
+                <p>Best Regards,<br><b>Vishal's Task App Team</b></p>
+            </body>
+        </html>
+        """
     }
 
     try:
