@@ -78,3 +78,27 @@ def verify_password(plain_password, hashed_password):
     except Exception as e:
         # Agar hash ka format galat hai (jaise seedha "1234" likha hai DB me)
         return False
+    
+
+
+# Isko file ke ekdum last me add karna hai
+
+def save_otp(db: Session, user: UserModel, otp: str, expiry_time):
+    # User ke record me OTP aur Expiry time save karna
+    user.reset_otp = otp
+    user.otp_expiry = expiry_time
+    db.commit()
+    db.refresh(user)
+    return user
+
+def reset_user_password(db: Session, user: UserModel, new_password: str):
+    # Naya password hash karo
+    hashed_password = get_password_hash(new_password)
+    
+    # DB me naya hash save karo, aur OTP field ko wapas khali (None) kar do
+    user.hash_password = hashed_password
+    user.reset_otp = None
+    user.otp_expiry = None
+    db.commit()
+    db.refresh(user)
+    return user

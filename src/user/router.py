@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, status, Request , BackgroundTasks
 from sqlalchemy.orm import Session
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from src.user.dtos import UserRequest, UserResponse, loginRequest
+# Upar imports me in dono ko add kar lena
+from src.user.dtos import UserRequest, UserResponse, loginRequest, ForgotPasswordRequest, ResetPasswordRequest
+
 from src.user import controller
 from src.utils.db import get_db
 
@@ -50,3 +52,14 @@ def delete_user_route(id: int, db: Session = Depends(get_db)):
 @user_routes.put("/{id}", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def update_user_route(id: int, body: UserRequest, db: Session = Depends(get_db)):
     return controller.update_user(id, body, db)
+
+
+
+
+@user_routes.post("/forgot-password")
+async def forgot_password_route(request: ForgotPasswordRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    return await controller.handle_forgot_password(request, background_tasks, db)
+
+@user_routes.post("/reset-password")
+async def reset_password_route(request: ResetPasswordRequest, db: Session = Depends(get_db)):
+    return await controller.handle_reset_password(request, db)

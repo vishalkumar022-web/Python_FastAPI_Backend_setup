@@ -52,3 +52,42 @@ async def send_email(emails: List[str]):
                 
     except Exception as e:
         print(f"❌ Bhai, Email API call me error aaya: {e}")
+
+
+
+
+
+
+
+
+async def send_otp_email(email: str, otp: str):
+    url = "https://api.brevo.com/v3/smtp/email"
+    headers = {
+        "accept": "application/json",
+        "api-key": settings.BREVO_API_KEY, 
+        "content-type": "application/json"
+    }
+    payload = {
+        "sender": {"name": "Task Management App", "email": "vishalsingh37040@gmail.com"},
+        "to": [{"email": email}],
+        "subject": "Password Reset OTP",
+        "htmlContent": f"""
+        <html>
+            <body>
+                <h2>Password Reset Request</h2>
+                <p>Hello,</p>
+                <p>Your OTP for password reset is: <b>{otp}</b></p>
+                <p>This OTP is valid for 5 minutes. Please do not share it with anyone.</p>
+                <br>
+                <p>Best Regards,<br><b>Vishal's Task App Team</b></p>
+            </body>
+        </html>
+        """
+    }
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(url, json=payload, headers=headers)
+        if response.status_code == 201:
+            print("✅ OTP Email sent successfully!")
+        else:
+            print(f"❌ Email Error: {response.text}")

@@ -8,13 +8,19 @@ from src.user import repository
 from src.utils.settings import settings
 from datetime import datetime, timedelta
 
-from src.utils.mail import send_email
+# Imports ko aise theek kar lo:
+from src.utils.mail import send_email, send_otp_email
+import random
+
+from src.user.model import UserModel
+
+
 
 import jwt
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from fastapi.security import HTTPAuthorizationCredentials # Ye token ko securely handle karega
 
-from src.utils.mail import send_email
+
 
 
 # Function me 'background_tasks' parameter add kiya
@@ -151,3 +157,44 @@ def is_authenticated(credentials: HTTPAuthorizationCredentials, db: Session):
     # Agar kisi ne token ke sath chhed-chhad ki hai ya galat token diya hai
     except InvalidTokenError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token! You are Unauthorized")
+    
+
+
+
+
+
+async def handle_forgot_password(request_data, background_tasks: BackgroundTasks, db_session: Session):
+       # 1. Repository se user find karo
+       user = repository.get_user_by_email(db_session, request_data.email)
+       if not user:
+           raise HTTPException(status_code=404, detail="Email not found!")
+
+       # 2. 6-digit random OTP generate karo aur Expiry time (5 mins) set karo
+       otp = str(random.randint(100000, 999999))
+       expiry_time = datetime.now() + timedelta(minutes=5)
+
+       # 3. Repository ke through DB me OTP save karo
+       repository.save_otp(db_session, user, otp, expiry_time)
+
+       # 4. Background task me email bhej do (taaki API fast chale)
+       background_tasks.add_task(send_otp_email, user.email, otp)
+       
+       return {"message": "OTP sent successfully to your email"}
+
+async def handle_reset_password(request_data, db_session: Session):
+       # 1. Repository se user find karo
+       user = repository.get_user_by_email(db_session, request_data.email)
+       if not user:
+           raise HTTPException(status_code=404, detail="User not found")
+
+       # 2. Check karo OTP match ho raha hai aur expire toh nahi hua
+       if user.reset_otp != request_data.otp:
+           raise HTTPException(status_code=400, detail="Invalid OTP")
+       
+       if datetime.now() > user.otp_expiry:
+           raise HTTPException(status_code=400, detail="OTP has expired")
+
+       # 3. Repository ke through password reset karo (wo khud hash karke save kar lega)
+       repository.reset_user_password(db_session, user, request_data.new_password)
+
+       return {"message": "Password reset successfully!"}

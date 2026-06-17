@@ -23,3 +23,12 @@ class UserResponse(BaseModel):
 class loginRequest(BaseModel):
     username : str 
     hash_password: str
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    email: str
+    otp: str
+    new_password: str

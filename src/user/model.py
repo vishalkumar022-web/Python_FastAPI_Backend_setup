@@ -19,3 +19,8 @@ class UserModel(Base):
     # Yahan default time add kiya, taaki DB khud time daal de
     created_at = Column(DateTime, default=func.now()) 
     is_active = Column(Boolean, default=True)
+
+
+    # Tumhari User class ke andar ye add karna hai:
+    reset_otp = Column(String, nullable=True)
+    otp_expiry = Column(DateTime, nullable=True)
