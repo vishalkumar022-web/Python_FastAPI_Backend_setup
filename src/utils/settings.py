@@ -15,8 +15,7 @@ class Settings(BaseSettings):
     DB_CONNECTION: str
     SECRET_KEY : str
     ALGORITHM : str
-    EXP_TIME : int
-
+    EXP_TIME : int 
     BREVO_API_KEY: str
 
 # Yahan humne us class ka ek object (instance) bana liya.
