@@ -9,11 +9,10 @@ class UserModel(Base):
     username = Column(String, unique=True, index=True, nullable=False) 
     name = Column(String, nullable=False) 
     email = Column(String, unique=True, index=True, nullable=False) 
-    hash_password = Column(String, nullable=False) 
+   # model.py me changes
+    hash_password = Column(String, nullable=True) # Pehle False tha
 
-
-   # <-- Yahan Integer ko String se replace kar diya!
-    mobile_number = Column(String, unique=True, index=True, nullable=False)
+    mobile_number = Column(String, nullable=True) # Pehle False tha
     
     
     # Yahan default time add kiya, taaki DB khud time daal de

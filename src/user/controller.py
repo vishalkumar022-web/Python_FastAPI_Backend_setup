@@ -12,7 +12,15 @@ from datetime import datetime, timedelta
 from src.utils.mail import send_email, send_otp_email
 import random
 
+import uuid
+
 from src.user.model import UserModel
+
+
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+from src.user.dtos import GoogleLoginRequest
+# settings se GOOGLE_CLIENT_ID import karna mat bhoolna
 
 
 
@@ -198,3 +206,55 @@ async def handle_reset_password(request_data, db_session: Session):
        repository.reset_user_password(db_session, user, request_data.new_password)
 
        return {"message": "Password reset successfully!"}
+
+
+
+
+async def google_login(request_data: GoogleLoginRequest, db_session: Session):
+    try:
+        # 1. Google token verify karo
+        id_info = id_token.verify_oauth2_token(
+            request_data.token, 
+            google_requests.Request(), 
+            settings.GOOGLE_CLIENT_ID
+        )
+
+        # 2. Google se user ki details nikalo
+        email = id_info.get("email")
+        name = id_info.get("name")
+
+        # 3. Check karo DB me user hai ya nahi
+        user = repository.get_user_by_email(db_session, email)
+
+        if not user:
+            # Username ko unique banane ka mast tarika
+            base_username = email.split("@")[0]
+            unique_username = f"{base_username}_{random.randint(1000, 9999)}"
+
+            # Agar naya user hai, toh DB me save karo (bina password/mobile ke)
+            new_user_data = UserModel(
+                username=unique_username,
+                name=name,
+                email=email,
+                hash_password=None, 
+                mobile_number=None,
+                is_active=True
+            )
+            # YEH SAARI LINES 'if' BLOCK KE ANDAR HONI CHAHIYE
+            db_session.add(new_user_data)
+            db_session.commit()
+            db_session.refresh(new_user_data)
+            user = new_user_data # Ab user update ho gaya
+
+        # 4. Apna JWT token banao aur bhej do
+        exp_time = datetime.now() + timedelta(minutes=settings.EXP_TIME)
+        token = jwt.encode(
+            {"id": user.id, "exp": exp_time.timestamp()}, 
+            settings.SECRET_KEY, 
+            settings.ALGORITHM
+        )
+
+        return {"User Details": user, "token": token}
+    
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Invalid Google Token!")

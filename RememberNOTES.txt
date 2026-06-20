@@ -48,3 +48,6 @@ alembic revision --autogenerate -m "add user_idto tasks" :---
 
 
 alembic upgrade head :--- 
+
+
+pip freeze | Out-File -Encoding utf8 requirements.txt

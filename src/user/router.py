@@ -8,6 +8,8 @@ from src.user.dtos import UserRequest, UserResponse, loginRequest, ForgotPasswor
 from src.user import controller
 from src.utils.db import get_db
 
+from src.user.dtos import GoogleLoginRequest
+
 user_routes = APIRouter(prefix="/users")
 
 # Security object for Swagger Lock Icon
@@ -63,3 +65,8 @@ async def forgot_password_route(request: ForgotPasswordRequest, background_tasks
 @user_routes.post("/reset-password")
 async def reset_password_route(request: ResetPasswordRequest, db: Session = Depends(get_db)):
     return await controller.handle_reset_password(request, db)
+
+
+@user_routes.post("/google-login")
+async def google_login_route(request: GoogleLoginRequest, db: Session = Depends(get_db)):
+    return await controller.google_login(request, db)
