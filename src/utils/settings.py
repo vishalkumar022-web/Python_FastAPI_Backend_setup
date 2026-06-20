@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     EXP_TIME : int 
     BREVO_API_KEY: str
 
+    # BAS YE EK LINE ADD KARNI HAI YAHAN:
+    GOOGLE_CLIENT_ID: str
+
+
 # Yahan humne us class ka ek object (instance) bana liya.
 # Ab pure application me kahin bhi database url chahiye, toh hum bas 'settings.DB_CONNECTION' likhenge!
 settings = Settings()
